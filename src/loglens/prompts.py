@@ -13,6 +13,9 @@ Rules:
 - If the cause is uncertain, say so in probable_cause.
 - Respond with a single JSON object that matches this JSON Schema exactly.
 - No markdown, no code fences, no text before or after the JSON.
+- Background errors at baseline rate are normal noise, not part of the incident.
+- Only list services in affected_services if incident_services includes them.
+- Do not claim causal links between services unless the data shows it.
 
 JSON Schema:
 {json.dumps(IncidentReport.model_json_schema(), indent=2)}
