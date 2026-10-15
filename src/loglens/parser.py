@@ -1,7 +1,10 @@
+
 import re
 from datetime import datetime
-from .models import LogEntry
 from pathlib import Path
+
+from .models import LogEntry
+
 
 LINE_RE = re.compile(
     r"(?P<timestamp>\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})\s+"
@@ -10,31 +13,29 @@ LINE_RE = re.compile(
     r"(?P<message>.+)"
 )
 
+
 def parse_line(line: str) -> LogEntry | None:
     line = line.strip()
     match = LINE_RE.fullmatch(line)
-    
+
     if match is None:
         return None
-    
-    
+
     try:
         timestamp = datetime.strptime(
-            match.group("timestamp"), 
+            match.group("timestamp"),
             "%Y-%m-%d %H:%M:%S",
         )
     except ValueError:
         return None
-    
+
     return LogEntry(
         timestamp=timestamp,
         level=match.group("level"),
         service=match.group("service"),
         message=match.group("message"),
     )
-    
-    
-    
+
 
 def parse_file(path: Path) -> tuple[list[LogEntry], int]:
     entries = []
@@ -50,10 +51,3 @@ def parse_file(path: Path) -> tuple[list[LogEntry], int]:
                 entries.append(entry)
 
     return entries, skipped
-    
-    
-    
-# if __name__ == "__main__":
-#     entries, skipped = parse_file(Path("samples/app.log"))
-#     print(f"Parsed: {len(entries)} | Skipped: {skipped}")
-#     print(entries[0])
