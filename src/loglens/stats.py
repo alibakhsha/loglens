@@ -1,4 +1,3 @@
-
 import re
 from collections import Counter, defaultdict
 from pathlib import Path
@@ -14,10 +13,7 @@ ALL_LEVELS = ["INFO", "WARNING", "ERROR", "CRITICAL"]
 def count_levels(entries: list[LogEntry]) -> dict[str, int]:
     counts = Counter(entry.level for entry in entries)
 
-    return {
-        level: counts.get(level, 0)
-        for level in ALL_LEVELS
-    }
+    return {level: counts.get(level, 0) for level in ALL_LEVELS}
 
 
 def errors_by_service(entries: list[LogEntry]) -> dict[str, int]:
@@ -73,11 +69,7 @@ def find_spikes(
     if average == 0:
         return []
 
-    return [
-        hour
-        for hour, count in per_hour.items()
-        if count > factor * average
-    ]
+    return [hour for hour, count in per_hour.items() if count > factor * average]
 
 
 def build_stats(
